@@ -1,0 +1,40 @@
+---
+- name: Instalar paquete Apache2
+  apt:
+    name: apache2
+    state: present
+    update_cache: yes
+  tags: apache
+
+- name: Crear directorio del documento root
+  file:
+    path: "{{ apache_document_root }}"
+    state: directory
+    mode: '0775'
+    owner: www-data
+    group: www-data
+  tags: apache
+
+- name: Configurar pagina de bienvenida personalizada
+  template:
+    src: index.html.j2
+    dest: "{{ apache_document_root }}/index.html"
+    mode: '0644'
+    owner: www-data
+    group: www-data
+  notify: reiniciar apache
+  tags: apache
+
+- name: Habilitar modulos necesarios de Apache
+  command: "a2enmod {{ item }}"
+  with_items:
+    - rewrite
+  notify: reiniciar apache
+  tags: apache
+
+- name: Asegurar que Apache este iniciado y habilitado
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+  tags: apache

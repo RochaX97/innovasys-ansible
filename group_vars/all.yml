@@ -1,0 +1,14 @@
+---
+
+nombre_empresa: "InnovaSys"
+
+apache_port: 80
+apache_document_root: /var/www/html
+welcome_message: "Bienvenidos a la web oficial de InnovaSys"
+
+samba_share_name: "Proyectos"
+samba_share_path: "/srv/samba/proyectos"
+samba_share_comment: "Repositorio de Archivos InnovaSys"
+samba_user: "devuser1"
+samba_group: "desarrolladores"
+samba_password: "Innova.2025"

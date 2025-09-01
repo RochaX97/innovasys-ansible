@@ -1,0 +1,25 @@
+---
+- name: Configurar servidor InnovaSys
+  hosts: servidores
+  become: yes
+  vars_files:
+    - group_vars/all.yml
+
+  pre_tasks:
+    - name: Actualizar cache de paquetes
+      apt:
+        update_cache: yes
+      tags: always
+
+  roles:
+    - role: apache
+    - role: samba
+
+  post_tasks:
+    - name: Mostrar resumen de la configuración
+      debug:
+        msg:
+          - "✅ Apache configurado en http://{{ ansible_host }}"
+          - "✅ Samba compartido: {{ samba_share_name }} ({{ samba_share_path }})"
+          - "👤 Usuario Samba: {{ samba_user }} / Contraseña: {{ samba_password }}"
+          - "👥 Grupo: {{ samba_group }}"

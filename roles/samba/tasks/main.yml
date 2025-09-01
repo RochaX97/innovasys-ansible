@@ -1,0 +1,52 @@
+---
+- name: Instalar paquete Samba
+  apt:
+    name: samba
+    state: present
+    update_cache: yes
+  tags: samba
+
+- name: Crear grupo del sistema
+  group:
+    name: "{{ samba_group }}"
+    state: present
+  tags: samba
+
+- name: Crear usuario de sistema sin shell
+  user:
+    name: "{{ samba_user }}"
+    group: "{{ samba_group }}"
+    shell: /usr/sbin/nologin
+    create_home: no
+    system: yes
+  tags: samba
+
+- name: Crear directorio compartido
+  file:
+    path: "{{ samba_share_path }}"
+    state: directory
+    mode: '0770'
+    owner: "{{ samba_user }}"
+    group: "{{ samba_group }}"
+  tags: samba
+
+- name: Configurar Samba
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    mode: '0644'
+  notify: reiniciar samba
+  tags: samba
+
+- name: Configurar contraseña de usuario Samba
+  shell: |
+    (echo "{{ samba_password }}"; echo "{{ samba_password }}") | smbpasswd -a -s "{{ samba_user }}"
+  no_log: true  # Oculta la contraseña en los logs
+  tags: samba
+
+- name: Asegurar que Samba esté iniciado y habilitado
+  service:
+    name: smbd
+    state: started
+    enabled: yes
+  tags: samba
