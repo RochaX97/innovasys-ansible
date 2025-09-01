@@ -4,7 +4,7 @@
 
 `bash
 # 1. Clonar repositorio
-git clone https://github.com/usuario/innovasys-ansible.git
+git clone https://github.com/RochaX97/innovasys-ansible.git
 cd innovasys-ansible
 
 # 2. Configurar inventario (editar inventario/hosts con tus datos)
