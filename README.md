@@ -1,9 +1,27 @@
-# Proyecto InnovaSys - Automatización Ansible
+# Proyecto InnovaSys - Ansible
 
-## ✅ Servicios Configurados y Funcionales
-- Apache: Portal web en http://[IP_SERVIDOR]
-- Samba: Recurso compartido //[IP_SERVIDOR]/Proyectos
+## Ejecución del Playbook
 
-## 🚀 Ejecución
 `bash
+# 1. Clonar repositorio
+git clone https://github.com/usuario/innovasys-ansible.git
+cd innovasys-ansible
+
+# 2. Configurar inventario (editar inventario/hosts con tus datos)
+nano inventario/hosts
+
+# 3. Ejecutar playbook
 ansible-playbook -i inventario/hosts site.yml --ask-become-pass
+
+# 4. Verificar servicios:
+
+# Apache (Portal web):
+curl http://192.168.10.100
+
+# Samba (Recurso compartido):
+smbclient //192.168.10.100/Proyectos -U devuser1%Innova.2025 -c "ls"
+
+# Credenciales Samba:
+# - Usuario: devuser1
+# - Contraseña: Innova.2025
+# - Recurso: //192.168.10.100/Proyectos\
